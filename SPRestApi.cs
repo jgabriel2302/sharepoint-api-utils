@@ -71,4 +71,34 @@ public class SPRestApi
         var response = await httpClient.SendAsync(request);
         return response.IsSuccessStatusCode;
     }
+
+    public async Task<string> GetAccessTokenAsync()
+    {
+        using (var client = new HttpClient())
+        {
+            var tokenEndpoint = $"https://accounts.accesscontrol.windows.net/{tenantId}/tokens/OAuth/2";
+            var resource = $"{siteUrl}@{tenantId}";
+            var postData = new Dictionary<string, string>
+            {
+                { "grant_type", "client_credentials" },
+                { "client_id", $"{clientId}@{tenantId}" },
+                { "client_secret", clientSecret },
+                { "resource", resource }
+            };
+    
+            var content = new FormUrlEncodedContent(postData);
+            var response = await client.PostAsync(tokenEndpoint, content);
+            var responseContent = await response.Content.ReadAsStringAsync();
+    
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception($"Erro ao obter token: {response.StatusCode} - {responseContent}");
+            }
+    
+            var jsonDoc = JsonDocument.Parse(responseContent);
+            var accessToken = jsonDoc.RootElement.GetProperty("access_token").GetString();
+            return accessToken;
+        }
+    }
+
 }
