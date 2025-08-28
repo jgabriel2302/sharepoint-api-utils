@@ -1,10 +1,14 @@
 # SPRestApi
 
-A classe `SPRestApi` é uma abstração em JavaScript para facilitar a comunicação com a API REST do SharePoint. Ela permite realizar operações como adicionar, atualizar, excluir e consultar itens de listas, além de obter informações do site e do usuário atual.
+A classe `SPRestApi` é uma abstração para facilitar a comunicação com a API REST do SharePoint. Ela está disponível em **JavaScript**, **C#** e **Python**, permitindo realizar operações como adicionar, atualizar, excluir e consultar itens de listas, além de obter informações do site e do usuário atual.
+
+---
 
 ## 📌 Finalidade
 
-Automatizar e simplificar o uso da API REST do SharePoint em aplicações JavaScript, com suporte para múltiplas listas e reutilização de instância.
+Automatizar e simplificar o uso da API REST do SharePoint em aplicações modernas, com suporte para múltiplas listas, autenticação via OAuth2 (em C# e Python) e reutilização de instância.
+
+---
 
 ## 🚀 Funcionalidades
 
@@ -23,10 +27,25 @@ Automatizar e simplificar o uso da API REST do SharePoint em aplicações JavaSc
 | `getSiteInfo()` | Obtém dados do site atual. |
 | `searchItems(filtro, lista)` | Pesquisa itens com filtro OData. |
 | `anyRequest(api, method, body, headers)` | Executa requisição arbitrária. |
+| `getAccessToken()` *(C# e Python)* | Obtém o token OAuth2 para autenticação. |
+
+---
 
 ## 📦 Instalação
 
-Não requer instalação de pacotes externos. Basta importar a classe em seu projeto JavaScript.
+### JavaScript
+Basta importar a classe em seu projeto.
+
+### C#
+Referencie `System.Net.Http`, `Newtonsoft.Json` e use `HttpClient` com OAuth2.
+
+### Python
+Instale `requests`:
+```bash
+pip install requests
+```
+
+---
 
 ## 💡 Exemplos de uso
 
@@ -37,17 +56,6 @@ const api = new SPRestApi('https://consoso.sharepoint.com/sites/meusite');
 api.setLista('Demandas');
 
 api.addItem({ Title: 'Nova demanda' })
-   .then(response => console.log(response));
-```
-
-```javascript
-const api = new SPRestApi('https://consoso.sharepoint.com/sites/meusite');
-const Demandas = api.getLista('Demandas');
-const Pessoas = api.getLista('Pessoas');
-
-Demandas.addItem({ Title: 'Nova demanda' })
-   .then(response => console.log(response));
-Pessoas.removeItem(13)
    .then(response => console.log(response));
 ```
 
@@ -94,7 +102,44 @@ function App() {
 export default App;
 ```
 
+---
+
+## 🐍 Python
+
+```python
+from SPRestApi import SPRestApi
+
+api = SPRestApi(site='https://consoso.sharepoint.com/sites/meusite',
+                client_id='seu-client-id',
+                client_secret='seu-client-secret',
+                tenant_id='seu-tenant-id')
+
+token = api.get_access_token()
+items = api.get_items('Demandas')
+print(items)
+```
+
+---
+
+## 💻 C#
+
+```csharp
+var api = new SPRestApi("https://consoso.sharepoint.com/sites/meusite",
+                        "seu-client-id",
+                        "seu-client-secret",
+                        "seu-tenant-id");
+
+string token = await api.GetAccessTokenAsync();
+string itemsJson = await api.GetItemsAsync("Demandas");
+Console.WriteLine(itemsJson);
+```
+
+---
+
 ## 🛠️ Requisitos
 
 - SharePoint Online com acesso à API REST.
 - Permissões adequadas para leitura/escrita nas listas.
+- Para C# e Python: registro de aplicativo no Azure AD com permissões para SharePoint.
+
+---
