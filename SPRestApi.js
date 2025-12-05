@@ -74,7 +74,7 @@ class SPRestApi {
      * @returns {string} Tipo de entidade codificado.
      */
     encodeEntityType(lista, useDefaultType = false) {
-        return useDefaultType ? this.type : "SP.Data." + lista.replace(/ /g, '_x0020_').replace(/_/g, '_x005f_') + "ListItem";
+        return useDefaultType ? this.type : "SP.Data." + String(lista ?? '').replace(/ /g, '_x0020_').replace(/_/g, '_x005f_') + "ListItem";
     }
 
     /**
@@ -556,3 +556,4 @@ class SPRestApi {
         return json.d.results;
     }
 }
+
