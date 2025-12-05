@@ -6,10 +6,8 @@ import requests
 class SPRestApi:
     class Utils:
         @staticmethod
-        def base64_para_bytes(base64_str: str, tipo: str = "image/jpeg") -> bytes:
-            parts = base64_str.split(",")
-            dados = parts[1] if len(parts) > 1 else parts[0]
-            return base64.b64decode(dados)
+        def base64_para_bytes(base64_str: str) -> bytes:
+            return SPRestApi.Utils.base64_para_arraybuffer(base64_str)
 
         @staticmethod
         def base64_para_arraybuffer(base64_str: str) -> bytes:
