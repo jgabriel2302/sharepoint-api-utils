@@ -13,12 +13,9 @@ public class SPRestApi
     // =========================
     public static class Utils
     {
-        public static byte[] Base64ParaBytes(string base64, string tipo = "image/jpeg")
+        public static byte[] Base64ParaBytes(string base64)
         {
-            // Suporta "data:image/jpeg;base64,AAAA" ou só "AAAA"
-            var partes = base64.Split(',');
-            var dados = partes.Length > 1 ? partes[1] : partes[0];
-            return Convert.FromBase64String(dados);
+            return SPRestApi.Utils.Base64ParaArrayBuffer(base64);
         }
 
         public static byte[] Base64ParaArrayBuffer(string base64)
